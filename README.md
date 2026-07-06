@@ -44,6 +44,28 @@ fica desabilitado.
 | `/[slug]/molduras` | Escolha de moldura (pulada se houver só uma) |
 | `/[slug]/camera?frame=[id]` | Câmera com moldura sobreposta + captura |
 | `/[slug]/galeria` | Feed público de fotos do evento |
+| `/admin` | Painel do organizador (protegido por senha) |
+
+## Painel do organizador (`/admin`)
+
+Permite gerenciar tudo sem tocar no banco:
+
+- **Criar festas** — nome, link (slug gerado automaticamente) e data.
+- **Molduras** — upload de PNGs por evento, com exclusão.
+- **QR code** — gerado automaticamente por evento, com download do PNG.
+- **Download em lote** — todas as fotos do evento em um `.zip`.
+- **Moderação** — remover fotos da galeria.
+- **Excluir festa** — apaga evento, molduras e fotos (banco + Storage).
+
+Requer duas variáveis de ambiente extras (`.env.local` e Vercel):
+
+```
+SUPABASE_SERVICE_ROLE_KEY=   # Settings -> API Keys -> service_role (só no servidor!)
+ADMIN_PASSWORD=              # senha de acesso ao /admin
+```
+
+A chave `service_role` ignora o RLS e por isso **nunca** deve levar o prefixo
+`NEXT_PUBLIC_` — ela só é usada nas rotas de API do servidor.
 
 ## Como funciona a captura
 

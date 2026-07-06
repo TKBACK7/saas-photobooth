@@ -9,6 +9,9 @@ export default function Home() {
       <p className="text-sm text-gray-400">
         Exemplo: <code className="rounded bg-pink-100 px-2 py-1">/kamilly3anos</code>
       </p>
+      <a href="/admin" className="mt-8 text-xs text-gray-300 underline">
+        Área do organizador
+      </a>
     </main>
   );
 }
