@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getEvent, getPhotos, isDemoMode } from "@/lib/data";
+import { estiloTema, temaDoEvento } from "@/lib/tema";
 
 export const dynamic = "force-dynamic";
 
@@ -15,22 +16,27 @@ export default async function GaleriaPage({
   if (!event) notFound();
 
   const photos = await getPhotos(event.id);
+  const tema = temaDoEvento(event);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-pink-100 via-festa-cream to-purple-100 p-4">
+    <main className="min-h-screen p-4" style={estiloTema(tema)}>
       <div className="mx-auto max-w-2xl">
         <div className="flex items-center justify-between py-2">
-          <Link href={`/${slug}`} className="text-sm text-festa-pink-dark">
+          <Link href={`/${slug}`} className="text-sm" style={{ color: "var(--tema)" }}>
             ← Voltar
           </Link>
           <Link
             href={`/${slug}/molduras`}
-            className="rounded-full bg-festa-pink px-4 py-2 text-sm font-bold text-white shadow"
+            className="rounded-full px-4 py-2 text-sm font-bold text-white shadow"
+            style={{ backgroundColor: "var(--tema)" }}
           >
             📸 Tirar foto
           </Link>
         </div>
-        <h1 className="mt-2 text-center text-2xl font-extrabold text-festa-pink">
+        <h1
+          className="mt-2 text-center text-2xl font-extrabold"
+          style={{ color: "var(--tema)" }}
+        >
           Galeria da festa
         </h1>
         <p className="text-center text-sm text-gray-500">{event.nome}</p>

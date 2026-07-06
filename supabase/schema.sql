@@ -7,8 +7,13 @@ create table if not exists events (
   slug text unique not null,           -- ex: "kamilly3anos", usado na URL
   nome text not null,
   data_festa date,
+  cor_tema text,                       -- cor do tema em hex (ex: "#f0559d"); null = neutro
   criado_em timestamp default now()
 );
+
+-- Migração para bancos criados antes da coluna cor_tema:
+-- alter table events add column if not exists cor_tema text;
+-- update events set cor_tema = '#f0559d' where slug = 'kamilly3anos';
 
 create table if not exists frames (
   id uuid primary key default gen_random_uuid(),

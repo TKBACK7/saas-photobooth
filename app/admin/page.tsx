@@ -9,12 +9,12 @@ export default async function AdminPage() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-8 text-center">
         <span className="text-4xl">🔧</span>
-        <h1 className="text-xl font-bold text-festa-pink">Painel não configurado</h1>
+        <h1 className="text-xl font-bold text-slate-800">Painel não configurado</h1>
         <p className="max-w-md text-gray-600">
           Defina as variáveis de ambiente abaixo (no <code>.env.local</code> e na
           Vercel) e reinicie o servidor:
         </p>
-        <ul className="rounded-xl bg-pink-50 p-4 text-left font-mono text-sm text-festa-pink-dark">
+        <ul className="rounded-xl bg-gray-50 p-4 text-left font-mono text-sm text-slate-700">
           {missingAdminEnv().map((v) => (
             <li key={v}>{v}</li>
           ))}
@@ -38,6 +38,7 @@ export default async function AdminPage() {
     slug: e.slug,
     nome: e.nome,
     data_festa: e.data_festa,
+    cor_tema: e.cor_tema ?? null,
     framesCount: e.frames?.[0]?.count ?? 0,
     photosCount: e.photos?.[0]?.count ?? 0,
   }));

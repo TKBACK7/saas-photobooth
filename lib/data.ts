@@ -8,6 +8,7 @@ const DEMO_EVENT: Evento = {
   slug: "kamilly3anos",
   nome: "Confeitaria da Kamilly Maria",
   data_festa: null,
+  cor_tema: "#f0559d",
 };
 
 const DEMO_FRAMES: Frame[] = [

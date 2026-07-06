@@ -10,6 +10,7 @@ export type AdminEvent = {
   slug: string;
   nome: string;
   data_festa: string | null;
+  cor_tema: string | null;
   framesCount: number;
   photosCount: number;
 };
@@ -29,6 +30,7 @@ export default function AdminDashboard({ events }: { events: AdminEvent[] }) {
   const [slug, setSlug] = useState("");
   const [slugEdited, setSlugEdited] = useState(false);
   const [dataFesta, setDataFesta] = useState("");
+  const [corTema, setCorTema] = useState("#475569");
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,7 +41,7 @@ export default function AdminDashboard({ events }: { events: AdminEvent[] }) {
     const res = await fetch("/api/admin/events", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome, slug, data_festa: dataFesta || null }),
+      body: JSON.stringify({ nome, slug, data_festa: dataFesta || null, cor_tema: corTema }),
     });
     setCreating(false);
     if (res.ok) {
@@ -60,15 +62,15 @@ export default function AdminDashboard({ events }: { events: AdminEvent[] }) {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-pink-100 via-festa-cream to-purple-100 p-4 pb-16">
+    <main className="min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-50 p-4 pb-16">
       <div className="mx-auto max-w-3xl">
         <div className="flex items-center justify-between py-2">
-          <h1 className="text-2xl font-extrabold text-festa-pink">
+          <h1 className="text-2xl font-extrabold text-slate-800">
             🎪 Painel do organizador
           </h1>
           <button
             onClick={logout}
-            className="rounded-full border border-pink-300 bg-white px-4 py-2 text-sm text-festa-pink-dark transition active:scale-95"
+            className="rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-slate-700 transition active:scale-95"
           >
             Sair
           </button>
@@ -77,9 +79,9 @@ export default function AdminDashboard({ events }: { events: AdminEvent[] }) {
         {/* Criar evento */}
         <form
           onSubmit={createEvent}
-          className="mt-4 rounded-2xl border-2 border-pink-200 bg-white p-5 shadow"
+          className="mt-4 rounded-2xl border-2 border-gray-200 bg-white p-5 shadow"
         >
-          <h2 className="font-bold text-festa-pink-dark">➕ Nova festa</h2>
+          <h2 className="font-bold text-slate-700">➕ Nova festa</h2>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             <input
               type="text"
@@ -90,7 +92,7 @@ export default function AdminDashboard({ events }: { events: AdminEvent[] }) {
               }}
               placeholder="Nome da festa (ex: Aniversário do João)"
               required
-              className="rounded-xl border border-pink-200 px-4 py-3 outline-none focus:border-festa-pink sm:col-span-2"
+              className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-slate-500 sm:col-span-2"
             />
             <input
               type="text"
@@ -101,14 +103,23 @@ export default function AdminDashboard({ events }: { events: AdminEvent[] }) {
               }}
               placeholder="link (ex: joao5anos)"
               required
-              className="rounded-xl border border-pink-200 px-4 py-3 font-mono text-sm outline-none focus:border-festa-pink"
+              className="rounded-xl border border-gray-200 px-4 py-3 font-mono text-sm outline-none focus:border-slate-500"
             />
             <input
               type="date"
               value={dataFesta}
               onChange={(e) => setDataFesta(e.target.value)}
-              className="rounded-xl border border-pink-200 px-4 py-3 text-gray-600 outline-none focus:border-festa-pink"
+              className="rounded-xl border border-gray-200 px-4 py-3 text-gray-600 outline-none focus:border-slate-500"
             />
+            <label className="flex items-center gap-3 rounded-xl border border-gray-200 px-4 py-2 text-sm text-gray-600 sm:col-span-2">
+              <input
+                type="color"
+                value={corTema}
+                onChange={(e) => setCorTema(e.target.value)}
+                className="h-9 w-12 cursor-pointer rounded border-0 bg-transparent p-0"
+              />
+              Cor do tema da festa (botões e títulos das páginas do evento)
+            </label>
           </div>
           {slug && (
             <p className="mt-2 text-xs text-gray-400">
@@ -119,14 +130,14 @@ export default function AdminDashboard({ events }: { events: AdminEvent[] }) {
           <button
             type="submit"
             disabled={creating}
-            className="mt-3 rounded-full bg-festa-pink px-6 py-3 font-bold text-white shadow transition active:scale-95 disabled:opacity-50"
+            className="mt-3 rounded-full bg-slate-800 px-6 py-3 font-bold text-white shadow transition active:scale-95 disabled:opacity-50"
           >
             {creating ? "Criando..." : "Criar festa"}
           </button>
         </form>
 
         {/* Lista de eventos */}
-        <h2 className="mt-8 font-bold text-festa-pink-dark">
+        <h2 className="mt-8 font-bold text-slate-700">
           🎉 Festas ({events.length})
         </h2>
         {events.length === 0 ? (

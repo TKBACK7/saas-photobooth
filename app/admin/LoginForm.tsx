@@ -28,9 +28,9 @@ export default function LoginForm() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-gradient-to-b from-pink-100 via-festa-cream to-purple-100 p-8">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-gradient-to-b from-gray-100 via-white to-gray-50 p-8">
       <span className="text-5xl">🔐</span>
-      <h1 className="text-2xl font-extrabold text-festa-pink">Área do organizador</h1>
+      <h1 className="text-2xl font-extrabold text-slate-800">Área do organizador</h1>
       <form onSubmit={submit} className="flex w-full max-w-xs flex-col gap-3">
         <input
           type="password"
@@ -38,13 +38,13 @@ export default function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Senha de administrador"
           autoFocus
-          className="rounded-full border-2 border-pink-200 bg-white px-5 py-3 outline-none focus:border-festa-pink"
+          className="rounded-full border-2 border-gray-200 bg-white px-5 py-3 outline-none focus:border-slate-500"
         />
         {error && <p className="text-center text-sm text-red-500">{error}</p>}
         <button
           type="submit"
           disabled={loading || !password}
-          className="rounded-full bg-festa-pink px-8 py-3 font-bold text-white shadow-lg transition active:scale-95 disabled:opacity-50"
+          className="rounded-full bg-slate-800 px-8 py-3 font-bold text-white shadow-lg transition active:scale-95 disabled:opacity-50"
         >
           {loading ? "Entrando..." : "Entrar"}
         </button>

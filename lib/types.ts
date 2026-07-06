@@ -3,6 +3,7 @@ export type Evento = {
   slug: string;
   nome: string;
   data_festa: string | null;
+  cor_tema: string | null; // hex (ex: "#f0559d"); null = tema neutro
 };
 
 export type Frame = {

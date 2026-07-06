@@ -108,6 +108,22 @@ export default function EventCard({
     }
   }
 
+  async function changeColor(cor: string) {
+    if (
+      await apiCall(
+        `/api/admin/events/${event.id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cor_tema: cor }),
+        },
+        "color"
+      )
+    ) {
+      onChanged();
+    }
+  }
+
   function copyLink() {
     navigator.clipboard.writeText(eventUrl).then(() => {
       setCopied(true);
@@ -116,30 +132,37 @@ export default function EventCard({
   }
 
   return (
-    <div className="rounded-2xl border-2 border-pink-200 bg-white shadow">
+    <div className="rounded-2xl border-2 border-gray-200 bg-white shadow">
       {/* Cabeçalho do card */}
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex w-full items-center justify-between gap-2 p-4 text-left"
       >
-        <div>
-          <p className="font-bold text-festa-pink-dark">{event.nome}</p>
+        <div className="flex items-center gap-3">
+          <span
+            className="h-4 w-4 shrink-0 rounded-full border border-gray-200"
+            style={{ backgroundColor: event.cor_tema ?? "#475569" }}
+            title="Cor do tema"
+          />
+          <div>
+            <p className="font-bold text-slate-700">{event.nome}</p>
           <p className="text-xs text-gray-400">
             <span className="font-mono">/{event.slug}</span>
             {event.data_festa && ` · ${event.data_festa.split("-").reverse().join("/")}`}
             {` · ${event.framesCount} moldura(s) · ${event.photosCount} foto(s)`}
-          </p>
+            </p>
+          </div>
         </div>
-        <span className="text-festa-pink">{open ? "▲" : "▼"}</span>
+        <span className="text-slate-800">{open ? "▲" : "▼"}</span>
       </button>
 
       {open && (
-        <div className="border-t border-pink-100 p-4">
+        <div className="border-t border-gray-100 p-4">
           {/* Ações */}
           <div className="flex flex-wrap gap-2">
             <button
               onClick={copyLink}
-              className="rounded-full bg-pink-100 px-4 py-2 text-sm font-medium text-festa-pink-dark transition active:scale-95"
+              className="rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-slate-700 transition active:scale-95"
             >
               {copied ? "✅ Copiado!" : "🔗 Copiar link"}
             </button>
@@ -147,13 +170,13 @@ export default function EventCard({
               href={`/${event.slug}/galeria`}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-pink-100 px-4 py-2 text-sm font-medium text-festa-pink-dark transition active:scale-95"
+              className="rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-slate-700 transition active:scale-95"
             >
               🖼️ Ver galeria
             </a>
             <a
               href={`/api/admin/events/${event.id}/zip`}
-              className={`rounded-full bg-pink-100 px-4 py-2 text-sm font-medium text-festa-pink-dark transition active:scale-95 ${
+              className={`rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-slate-700 transition active:scale-95 ${
                 event.photosCount === 0 ? "pointer-events-none opacity-40" : ""
               }`}
             >
@@ -170,8 +193,24 @@ export default function EventCard({
 
           {message && <p className="mt-2 text-sm text-red-500">{message}</p>}
 
+          {/* Cor do tema */}
+          <label className="mt-4 flex items-center gap-3 rounded-xl bg-gray-50 p-3 text-sm text-gray-600">
+            <input
+              type="color"
+              defaultValue={event.cor_tema ?? "#475569"}
+              onBlur={(e) => {
+                if (e.target.value !== (event.cor_tema ?? "#475569")) {
+                  changeColor(e.target.value);
+                }
+              }}
+              disabled={busy === "color"}
+              className="h-9 w-12 cursor-pointer rounded border-0 bg-transparent p-0"
+            />
+            {busy === "color" ? "Salvando cor..." : "Cor do tema da festa"}
+          </label>
+
           {/* QR Code */}
-          <div className="mt-4 flex items-center gap-4 rounded-xl bg-pink-50 p-4">
+          <div className="mt-4 flex items-center gap-4 rounded-xl bg-gray-50 p-4">
             {qrDataUrl ? (
               <img src={qrDataUrl} alt={`QR code de ${event.nome}`} className="h-28 w-28 rounded-lg bg-white p-1" />
             ) : (
@@ -180,13 +219,13 @@ export default function EventCard({
               </div>
             )}
             <div className="text-sm">
-              <p className="font-medium text-festa-pink-dark">QR code da festa</p>
+              <p className="font-medium text-slate-700">QR code da festa</p>
               <p className="mt-1 break-all font-mono text-xs text-gray-500">{eventUrl}</p>
               {qrDataUrl && (
                 <a
                   href={qrDataUrl}
                   download={`qrcode-${event.slug}.png`}
-                  className="mt-2 inline-block rounded-full bg-festa-pink px-4 py-2 text-xs font-bold text-white transition active:scale-95"
+                  className="mt-2 inline-block rounded-full bg-slate-800 px-4 py-2 text-xs font-bold text-white transition active:scale-95"
                 >
                   ⬇️ Baixar QR code
                 </a>
@@ -195,13 +234,13 @@ export default function EventCard({
           </div>
 
           {/* Molduras */}
-          <h3 className="mt-5 text-sm font-bold text-festa-pink-dark">
+          <h3 className="mt-5 text-sm font-bold text-slate-700">
             Molduras ({frames.length})
           </h3>
           <div className="mt-2 flex flex-wrap gap-3">
             {frames.map((frame) => (
               <div key={frame.id} className="w-24">
-                <div className="aspect-[9/16] overflow-hidden rounded-lg border border-pink-200 bg-gradient-to-b from-pink-50 to-purple-50">
+                <div className="aspect-[9/16] overflow-hidden rounded-lg border border-gray-200 bg-gradient-to-b from-gray-50 to-gray-100">
                   <img
                     src={frame.imagem_url}
                     alt={frame.nome ?? "Moldura"}
@@ -227,18 +266,18 @@ export default function EventCard({
               name="file"
               accept="image/png"
               required
-              className="text-xs text-gray-500 file:mr-2 file:rounded-full file:border-0 file:bg-pink-100 file:px-4 file:py-2 file:text-xs file:font-medium file:text-festa-pink-dark"
+              className="text-xs text-gray-500 file:mr-2 file:rounded-full file:border-0 file:bg-gray-100 file:px-4 file:py-2 file:text-xs file:font-medium file:text-slate-700"
             />
             <input
               type="text"
               name="nome"
               placeholder="Nome da moldura (opcional)"
-              className="rounded-full border border-pink-200 px-4 py-2 text-xs outline-none focus:border-festa-pink"
+              className="rounded-full border border-gray-200 px-4 py-2 text-xs outline-none focus:border-slate-500"
             />
             <button
               type="submit"
               disabled={busy === "frame-up"}
-              className="rounded-full bg-festa-pink px-4 py-2 text-xs font-bold text-white transition active:scale-95 disabled:opacity-50"
+              className="rounded-full bg-slate-800 px-4 py-2 text-xs font-bold text-white transition active:scale-95 disabled:opacity-50"
             >
               {busy === "frame-up" ? "Enviando..." : "⬆️ Adicionar moldura"}
             </button>
@@ -248,7 +287,7 @@ export default function EventCard({
           </p>
 
           {/* Moderação da galeria */}
-          <h3 className="mt-5 text-sm font-bold text-festa-pink-dark">
+          <h3 className="mt-5 text-sm font-bold text-slate-700">
             Fotos da galeria ({photos.length})
           </h3>
           {photos.length === 0 ? (

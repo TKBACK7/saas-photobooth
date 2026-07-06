@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getEvent, getFrame, publishPhoto, isDemoMode } from "@/lib/data";
+import { temaDoEvento } from "@/lib/tema";
 import type { Evento, Frame } from "@/lib/types";
 
 type FacingMode = "user" | "environment";
@@ -36,6 +37,8 @@ export default function CameraView() {
   const [publishing, setPublishing] = useState(false);
   const [published, setPublished] = useState(false);
   const [publishError, setPublishError] = useState<string | null>(null);
+
+  const tema = temaDoEvento(event);
 
   // Carrega evento e moldura
   useEffect(() => {
@@ -234,7 +237,7 @@ export default function CameraView() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-black p-8 text-center text-white">
         <p>Nenhuma moldura selecionada.</p>
-        <Link href={`/${slug}/molduras`} className="text-pink-400 underline">
+        <Link href={`/${slug}/molduras`} className="text-gray-300 underline">
           Escolher moldura
         </Link>
       </main>
@@ -280,7 +283,8 @@ export default function CameraView() {
             {published ? (
               <Link
                 href={`/${slug}/galeria`}
-                className="rounded-full bg-festa-pink px-4 py-3 text-center font-bold text-white transition active:scale-95"
+                className="rounded-full px-4 py-3 text-center font-bold text-white transition active:scale-95"
+                style={{ backgroundColor: tema }}
               >
                 Ver galeria
               </Link>
@@ -288,7 +292,8 @@ export default function CameraView() {
               <button
                 onClick={publish}
                 disabled={publishing || isDemoMode()}
-                className="rounded-full bg-festa-pink px-4 py-3 font-bold text-white transition active:scale-95 disabled:opacity-50"
+                className="rounded-full px-4 py-3 font-bold text-white transition active:scale-95 disabled:opacity-50"
+                style={{ backgroundColor: tema }}
               >
                 {publishing ? "Enviando..." : "🎉 Publicar"}
               </button>
@@ -344,7 +349,8 @@ export default function CameraView() {
               <p className="text-sm">{cameraError}</p>
               <button
                 onClick={() => setRetryKey((k) => k + 1)}
-                className="rounded-full bg-festa-pink px-6 py-3 font-bold text-white transition active:scale-95"
+                className="rounded-full px-6 py-3 font-bold text-white transition active:scale-95"
+                style={{ backgroundColor: tema }}
               >
                 🔄 Tentar novamente
               </button>
@@ -370,8 +376,8 @@ export default function CameraView() {
           onClick={capture}
           disabled={!cameraReady}
           aria-label="Tirar foto"
-          className="h-18 w-18 rounded-full border-4 border-white bg-festa-pink p-1 shadow-lg transition active:scale-90 disabled:opacity-40"
-          style={{ width: 72, height: 72 }}
+          className="h-18 w-18 rounded-full border-4 border-white p-1 shadow-lg transition active:scale-90 disabled:opacity-40"
+          style={{ width: 72, height: 72, backgroundColor: tema }}
         />
         <button
           onClick={() =>

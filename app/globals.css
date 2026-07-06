@@ -1,16 +1,10 @@
 @import "tailwindcss";
 
-@theme {
-  --color-festa-pink: #f0559d;
-  --color-festa-pink-dark: #d13a85;
-  --color-festa-cream: #fff7fb;
-}
-
 html,
 body {
   height: 100%;
 }
 
 body {
-  background: var(--color-festa-cream);
+  background: #fafafa;
 }
