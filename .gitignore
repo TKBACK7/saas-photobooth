@@ -1,7 +1,12 @@
 node_modules
 .next
 out
-.env.local
-.env*.local
 *.tsbuildinfo
 next-env.d.ts
+
+# Segredos: NUNCA versionar arquivos de ambiente (só o .example)
+.env
+.env.local
+.env*.local
+.env.local.bak
+*.bak
